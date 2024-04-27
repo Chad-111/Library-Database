@@ -1,0 +1,97 @@
+<!-- This template extends or inherits from another template named "base.html" -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Styles for the table -->
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        padding: 5px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<!-- Heading for the page -->
+<h2>Browse Library Items</h2>
+
+<!-- Search form -->
+<form method="GET" action="{{ url_for('browse') }}">
+    <input type="text" name="search" placeholder="Search by title" aria-label="Search by title">
+    <button type="submit">Search</button>
+</form>
+
+<!-- Check if items exist -->
+{% if items %}
+
+<!-- Display items in a table -->
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Author</th>
+            <th>Available</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Loop through each item -->
+        {% for item in items %}
+        <tr>
+            <!-- Display item details -->
+            <td>{{ item.title }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.author }}</td>
+            <td>{{ 'Yes' if item.available else 'No' }}</td>
+            <td>
+              <!-- Check if item is available -->
+                {% if item.available %}
+                <!-- Show checkout button -->
+                <button onclick="checkoutItem({{ item.item_id }})">Checkout</button>
+                {% else %}
+                <!-- Show message if item is not available -->
+                Not available
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <!-- Display message if no items found -->
+    <p style="font-size: 18px;">No items found.</p>
+{% endif %}
+
+<!-- JavaScript code for checkout action -->
+<script>
+    function checkoutItem(itemId) {
+        // Send a POST request to checkout the item
+        fetch('/checkout_item/' + itemId, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display success or error message
+            if (data.status === 'success') {
+                alert(data.message);
+                // Redirect to profile page after checkout
+                setTimeout(function() {
+                    window.location.href = '/profile';
+                }, 500);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
+{% endblock %}

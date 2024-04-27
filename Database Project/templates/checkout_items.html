@@ -1,0 +1,57 @@
+<!-- This template extends or inherits from another template named "base.html" -->
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Heading for the page -->
+<h2>Your Checked-Out Items</h2>
+
+<!-- Table to display checked-out items -->
+<table>
+    <thead>
+        <tr>
+            <!-- Table headers -->
+            <th>Title</th>
+            <th>Type</th>
+            <th>Author</th>
+            <th>Return</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Loop through each checked-out item -->
+        {% for item in checked_out_items %}
+        <tr>
+            <!-- Display item details -->
+            <td>{{ item.title }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.author }}</td>
+            <!-- Button to return the item -->
+            <td>
+                <button onclick="returnItem({{ item.item_id }})">Return</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- JavaScript code for returning items -->
+<script>
+    function returnItem(itemId) {
+        // Send a POST request to return the item
+        fetch('/return_item/' + itemId, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display success or error message
+                if (data.status === 'success') {
+                    alert(data.message);
+                    // Reload the page to update the item list
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

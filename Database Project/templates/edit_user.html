@@ -1,0 +1,37 @@
+<!-- This template extends or inherits from another template named "base.html" -->
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Page heading -->
+<h2>Edit User</h2>
+
+<!-- Form for editing user details -->
+<form action="{{ url_for('edit_user', user_id=user.id) }}" method="post">
+    <!-- Display user ID -->
+    <label for="id">ID: {{ user.id }}</label><br>
+
+    <!-- Input field for editing username -->
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required value="{{ user.username }}"><br>
+
+    <!-- Input field for editing first name -->
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required value="{{ user.first_name }}"><br>
+
+    <!-- Input field for editing last name -->
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required value="{{ user.last_name }}"><br>
+
+    <!-- Dropdown select field for editing user role -->
+    <label for="role">Role:</label>
+    <select id="role" name="role">
+        <!-- Option for Librarian role with conditional selection -->
+        <option value="Librarian" {% if user.role == 'Librarian' %}selected{% endif %}>Librarian</option>
+        <!-- Option for Patron role with conditional selection -->
+        <option value="Patron" {% if user.role == 'Patron' %}selected{% endif %}>Patron</option>
+    </select><br>
+
+    <!-- Submit button to update user details -->
+    <button type="submit">Update User</button>
+</form>
+{% endblock %}

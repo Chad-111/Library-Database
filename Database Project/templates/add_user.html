@@ -1,0 +1,38 @@
+<!-- This template extends or inherits from another template named "base.html" -->
+{% extends "base.html" %}
+
+{% block title %}Add User{% endblock %}
+
+{% block content %}
+<!-- Page heading -->
+<h2>Add New User</h2>
+
+<!-- Form for adding a new user -->
+<form method="POST" action="{{ url_for('add_user') }}">
+    <!-- Input field for username -->
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <!-- Input field for password -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <!-- Input field for first name -->
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required>
+
+    <!-- Input field for last name -->
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required>
+
+    <!-- Dropdown for selecting user role -->
+    <label for="role">Role:</label>
+    <select id="role" name="role">
+        <option value="Librarian">Librarian</option>
+        <option value="Patron">Patron</option>
+    </select>
+
+    <!-- Submit button to add the user -->
+    <button type="submit">Add User</button>
+</form>
+{% endblock %}

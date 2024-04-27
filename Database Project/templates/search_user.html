@@ -1,0 +1,16 @@
+<!-- This template extends or inherits from another template named "base.html" -->
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Page heading -->
+<h2>Search User by Library ID</h2>
+
+<!-- Form for searching user by User ID -->
+<form action="{{ url_for('search_user') }}" method="post">
+    <!-- Input field for entering User ID -->
+    <label for="user_id">Library ID:</label>
+    <input type="text" id="user_id" name="user_id" required>
+    <!-- Submit button to perform the search -->
+    <button type="submit">Search</button>
+</form>
+{% endblock %}

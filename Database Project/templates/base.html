@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Term Project{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Library Dashboard</h1>
+        <nav>
+          <hr>
+            <!-- Basic buttons for navigation for all roles -->
+            <p><button onclick="window.location.href='{{ url_for('profile') }}'">Home</button></p>
+            <p><button onclick="window.location.href='{{ url_for('browse') }}'">Browse</button></p>
+            {% if session.get('user') and session['user']['role'] == 'Librarian' %}
+            <!-- Basic buttons for navigation for only Librarians -->
+            <p><button onclick="window.location.href='{{ url_for('users') }}'">Users</button></p>
+            <p><button onclick="window.location.href='{{ url_for('add_item') }}'">Add Library Item</button></p>
+            <p><button onclick="window.location.href='{{ url_for('search_user') }}'">Search User</button></p>
+            {% endif %}
+            <p><button onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+              <hr>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %} {% endblock %}
+    </main>
+    <hr>
+    <footer>
+        <p>
+            <font size="2"> CS 351 Database Term Project </font>
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!-- This template extends or inherits from another template named "base.html" -->
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Container for user profile -->
+<div class="user-profile">
+    <!-- Heading for user profile section -->
+    <h2>User Profile</h2>
+    <!-- Display username if available, else show "Not Available" -->
+    <p style="font-size: 18px;"><strong>Username:</strong> {{ user_info.username if user_info.username else 'Not Available' }}</p>
+    <!-- Display first name -->
+    <p style="font-size: 18px;"><strong>First Name:</strong> {{ user_info.first_name }}</p>
+    <!-- Display last name -->
+    <p style="font-size: 18px;"><strong>Last Name:</strong> {{ user_info.last_name }}</p>
+    <!-- Display user role -->
+    <p style="font-size: 18px;"><strong>Role:</strong> {{ user_info.role }}</p>
+
+    <!-- Check if user is a Patron and has checked-out items -->
+    {% if user_info.role == 'Patron' %}
+    {% if checked_out_items %}
+    <!-- Heading for checked-out items section -->
+    <h3>Checked Out Items:</h3>
+    <!-- Display checked-out items in a list -->
+    <ul>
+        <!-- Loop through each checked-out item -->
+        {% for item in checked_out_items %}
+        <!-- Display item details and return button -->
+        <li style="font-size: 18px;"> [{{ item.type }}] {{ item.title }} by {{ item.author }} <button onclick="returnItem({{ item.item_id }})">Return</button></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <!-- Display message if no items are checked out -->
+    <p style="font-size: 18px;">No items currently checked out.</p>
+    {% endif %}
+    {% endif %}
+</div>
+
+<!-- JavaScript code for returning items -->
+<script>
+    function returnItem(itemId) {
+        // Send a POST request to return the item
+        fetch('/return_item/' + itemId, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display success or error message
+                if (data.status === 'success') {
+                    alert('Item returned successfully!');
+                    // Reload the page to update the item list
+                    window.location.reload();
+                } else {
+                    alert('Failed to return the item: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while returning the item.');
+            });
+    }
+</script>
+{% endblock %}
